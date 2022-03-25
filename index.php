@@ -1,3 +1,3 @@
 <?php 
 
-echo 'API DO KISS POINT';
+header("Location: login/index.php");
