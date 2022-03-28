@@ -1,12 +1,7 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: multipart/form-data');
-header("Access-Control-Allow-Methods: POST");
-header("Allow: GET, POST, OPTIONS, PUT, DELETE");
-header("Access-Control-Allow-Headers: Authentication, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Allow-Origin");
 
-$login = isset($_POST['usuario']) ? $_POST['usuario'] : null;
-$senha = isset($_POST['senha']) ? $_POST['senha'] : null;
+$login = isset($_GET['usuario']) ? $_GET['usuario'] : null;
+$senha = isset($_GET['senha']) ? $_GET['senha'] : null;
 
 
 if (isset($login) && isset($senha)) {
@@ -33,7 +28,7 @@ if (isset($login) && isset($senha)) {
 
     if (count($response) > 0) {
         echo json_encode($response);
-    }elsE{
+    } else {
         echo json_encode([]);
     }
 }
