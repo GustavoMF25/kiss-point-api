@@ -1,5 +1,5 @@
 <?php
-
+print_r($_REQUEST);
 $login = isset($_GET['usuario']) ? $_GET['usuario'] : null;
 $senha = isset($_GET['senha']) ? $_GET['senha'] : null;
 
