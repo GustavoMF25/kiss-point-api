@@ -31,4 +31,6 @@ if (isset($login) && isset($senha)) {
     } else {
         echo json_encode([]);
     }
+} else {
+    echo 'sem dados';
 }
