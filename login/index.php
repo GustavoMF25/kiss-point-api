@@ -11,7 +11,7 @@ function validaLogin($login, $senha, $con)
     $validaUsuario = mysqli_fetch_array($respVerificaUsuario);
     if (isset($validaUsuario[0])) {
         $data = ['id' => $validaUsuario[0], 'nome' => $validaUsuario[1], 'email' => $validaUsuario[2], 'login' => $validaUsuario[3], 'token' => $token];
-        return ['status' => true, 'data' => $data];
+        return ['status' => true, 'dados' => $data];
     } else {
         $return = ['status' => false, 'error' => 'Usuário não encontrado.'];
     }
