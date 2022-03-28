@@ -21,15 +21,11 @@ function validaLogin($login, $senha, $con)
 if (isset($login) && isset($senha)) {
     include '../app/config/conMysql.php';
     $response = [];
-
-
     $response = validaLogin($login, $senha, $con);
-    
+
     if (count($response) > 0) {
         echo json_encode($response);
-    } else {
-        echo json_encode([]);
     }
-} else {
-    echo 'sem dadosssss';
+}else{
+    echo json_encode(['status' => false, 'error' => 'Digite um usuário e senha.']);
 }
