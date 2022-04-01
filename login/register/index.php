@@ -21,19 +21,27 @@ $country = isset($_GET['country']) ? $_GET['country'] : null;
 $state = isset($_GET['state']) ? $_GET['state'] : null;
 $city = isset($_GET['city']) ? $_GET['city'] : null;
 
+function register($login, $password, $name, $email, $country, $state, $city, $con)
+{
+    $return = [];
+    $token = '';
+
+    $sqlVerifyUser = "select 1 from user where login = '{$login}'";
+    $resultVerifyUser = mysqli_query($con, $sqlVerifyUser);
+    if(mysqli_num_rows($resultVerifyUser) > 0){
+        $return = ['status' => false, 'error' => 'Login em uso.'];
+    }
+
+    return $return;
+}
+
 if (
     isset($login) && isset($password) &&
     isset($name) && isset($email) &&
     isset($country) && isset($state) && isset($city)
 ) {
-
     include '../../app/config/conMysql.php';
     $response = [];
-    $response = validaLogin($login, $senha, $con);
-
-    if (count($response) > 0) {
-        echo json_encode($response);
-    }
 } else {
     echo json_encode(['status' => false, 'error' => 'Digite um usuário e senha.']);
 }
