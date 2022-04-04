@@ -1,13 +1,10 @@
 {
     "name": "vendor/kiss-point-api",
-   
     "authors": [
         {
             "name": "HerrisonTr",
             "email": "herrison.trugilho2@gmail.com"
         }
     ],
-    "require": {
-        "phpmailer/phpmailer": "^6.6"
-    }
+    "require": {}
 }

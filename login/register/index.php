@@ -9,12 +9,11 @@
 //country
 //state
 //city
-//emailVerified
+
 echo "CONEXÃO OK!";
 die();
 
 require '../../vendor/autoload.php';
-include '../../app/config/conMysql.php';
 include 'FuncSendEmail.php';
 
 $login = isset($_GET['login']) ? $_GET['login'] : null;
@@ -27,19 +26,24 @@ $country = isset($_GET['country']) ? $_GET['country'] : null;
 $state = isset($_GET['state']) ? $_GET['state'] : null;
 $city = isset($_GET['city']) ? $_GET['city'] : null;
 
+$token = '';
 $namePhoto = '';
 $hashed_password = password_hash($password, PASSWORD_DEFAULT); //password encryption
 
-function register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con)
-{
+function register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con){
     $return = [];
-    $token = '';
 
-    $sqlVerifyUser = "select 1 from user where login = '{$login}'";
-    $resultVerifyUser = mysqli_query($con, $sqlVerifyUser);
-    if(mysqli_num_rows($resultVerifyUser) > 0){
-        $return = ['status' => false, 'error' => 'Login em uso.'];
-    } else{
+    $sqlVerifyLogin = "select 1 from user where login = '{$login}'";
+    $resultVerifyLogin = mysqli_query($con, $sqlVerifyLogin);
+
+    $sqlVerifyEmail = "select 1 from user where email = '{$email}'";
+    $resultVerifyEmail = mysqli_query($con, $sqlVerifyEmail);
+
+    if (mysqli_num_rows($resultVerifyLogin) > 0) {
+        $return = ['status' => false, 'error' => 'Login indisponível.'];
+    } elseif (mysqli_num_rows($resultVerifyEmail) > 0) {
+        $return = ['status' => false, 'error' => 'Usuário já cadastrado'];
+    } else {
         $sqlRegisterUser = "insert into user values (null,
                                                      '{$login}',
                                                      '{$hashed_password}',   
@@ -51,11 +55,23 @@ function register($login, $hashed_password, $name, $email, $namePhoto, $datebirt
                                                      '{$state}',
                                                      '{$city}',
                                                      'n')";
-        if(mysqli_query($con, $sqlRegisterUser)){
-            
+        if (mysqli_query($con, $sqlRegisterUser)) {
+            $code = rand(100000, 999999);
+            $sqlVerifyCode = "select 1 from tokenEmail 
+                                  where code = '{$code}'";
+            $resultVerifyCode  = mysqli_query($con, $sqlVerifyCode);
+            if (mysqli_num_rows($resultVerifyCode) > 0) {
+                $code = rand(100000, 999999);
+            }
 
-
-        }                                                     
+            if (sendEmail($email, $code) == true) {
+                $return = ['status' => true, 'sendEmail' => true];
+            } else {
+                $return = ['status' => true, 'sendEmail' => false];
+            }
+        } else {
+            $return = ['status' => false, 'error' => 'Erro ao cadastrar usuário'];
+        }
     }
     return $return;
 }
@@ -68,6 +84,7 @@ if (
 ) {
     include '../../app/config/conMysql.php';
     $response = [];
+    $response = register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con);
 } else {
     echo json_encode(['status' => false, 'error' => 'Preencha todos os campos.']);
 }
