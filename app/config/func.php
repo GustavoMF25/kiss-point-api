@@ -33,7 +33,7 @@ function sendEmail($emailUser, $codeEmail, $title)
         $mail->Body = utf8_decode($codeEmail);
 
         $mail->send();
-        echo 'Message has been sent';
+        //echo 'Message has been sent';
         return true;
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
