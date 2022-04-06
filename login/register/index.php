@@ -10,11 +10,11 @@
 //state
 //city
 
-echo "CONEXÃO OK!";
-die();
+// echo "CONEXÃO OK!";
+// die();
 
 require '../../vendor/autoload.php';
-include 'FuncSendEmail.php';
+// include 'FuncSendEmail.php';
 
 $login = isset($_GET['login']) ? $_GET['login'] : null;
 $password = isset($_GET['password']) ? $_GET['password'] : null;
@@ -30,7 +30,8 @@ $token = '';
 $namePhoto = '';
 $hashed_password = password_hash($password, PASSWORD_DEFAULT); //password encryption
 
-function register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con){
+function register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con)
+{
     $return = [];
 
     $sqlVerifyLogin = "select 1 from user where login = '{$login}'";
@@ -55,6 +56,7 @@ function register($login, $hashed_password, $name, $email, $namePhoto, $datebirt
                                                      '{$state}',
                                                      '{$city}',
                                                      'n')";
+        echo $sqlRegisterUser;
         if (mysqli_query($con, $sqlRegisterUser)) {
             $code = rand(100000, 999999);
             $sqlVerifyCode = "select 1 from tokenEmail 
@@ -64,11 +66,11 @@ function register($login, $hashed_password, $name, $email, $namePhoto, $datebirt
                 $code = rand(100000, 999999);
             }
 
-            if (sendEmail($email, $code) == true) {
-                $return = ['status' => true, 'sendEmail' => true];
-            } else {
-                $return = ['status' => true, 'sendEmail' => false];
-            }
+            // if (sendEmail($email, $code) == true) {
+            //     $return = ['status' => true, 'sendEmail' => true];
+            // } else {
+            //     $return = ['status' => true, 'sendEmail' => false];
+            // }
         } else {
             $return = ['status' => false, 'error' => 'Erro ao cadastrar usuário'];
         }
@@ -78,9 +80,10 @@ function register($login, $hashed_password, $name, $email, $namePhoto, $datebirt
 
 if (
     isset($login) && isset($password) &&
-    isset($name) && isset($email) &&
-    isset($country) && isset($state) &&
-    isset($city) && isset($datebirth)
+    isset($name) && isset($email)
+
+    // isset($country) && isset($state) &&
+    // isset($city) && isset($datebirth)
 ) {
     include '../../app/config/conMysql.php';
     $response = [];
@@ -88,3 +91,4 @@ if (
 } else {
     echo json_encode(['status' => false, 'error' => 'Preencha todos os campos.']);
 }
+print_r($response);
