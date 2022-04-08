@@ -1,4 +1,5 @@
 <?php
+include '../app/config/config.php';
 $login = isset($_GET['usuario']) ? $_GET['usuario'] : null;
 $senha = isset($_GET['senha']) ? md5($_GET['senha']) : null;
 
@@ -22,7 +23,7 @@ function validaLogin($login, $senha, $con)
 if (isset($login) && isset($senha)) {
     include '../app/config/conMysql.php';
     $response = [];
-    // $response = validaLogin($login, $senha, $con);
+    $response = validaLogin($login, $senha, $con);
 
     // if (count($response) > 0) {
     //     echo json_encode($response);
