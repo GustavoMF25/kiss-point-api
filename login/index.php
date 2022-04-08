@@ -22,7 +22,7 @@ function validaLogin($login, $senha, $con)
 if (isset($login) && isset($senha)) {
     include '../app/config/conMysql.php';
     $response = [];
-    $response = validaLogin($login, $senha, $con);
+    // $response = validaLogin($login, $senha, $con);
 
     if (count($response) > 0) {
         echo json_encode($response);
