@@ -1,5 +1,6 @@
 <?php
 include '../app/config/config.php';
+include '../app/config/conMysql.php';
 $login = isset($_GET['usuario']) ? $_GET['usuario'] : null;
 $senha = isset($_GET['senha']) ? md5($_GET['senha']) : null;
 
@@ -7,7 +8,7 @@ function validaLogin($login, $senha, $con)
 {
     $return = [];
     $token = '';
-    $sqlVerificaUsuario = "select idusuario, nome, email, login from usuario where login = '{$login}' and senha = '{$senha}'";
+    $sqlVerificaUsuario = "select iduser, name, email, login, photo from user where login = '{$login}' and password = '{$senha}'";
     $respVerificaUsuario = mysqli_query($con, $sqlVerificaUsuario);
     $validaUsuario = mysqli_fetch_array($respVerificaUsuario);
     if (isset($validaUsuario[0])) {
@@ -25,9 +26,9 @@ if (isset($login) && isset($senha)) {
     $response = [];
     $response = validaLogin($login, $senha, $con);
 
-    // if (count($response) > 0) {
-    //     echo json_encode($response);
-    // }
-}else{
+    if (count($response) > 0) {
+        echo json_encode($response);
+    }
+} else {
     echo json_encode(['status' => false, 'error' => 'Digite um usuário e senha.']);
 }
