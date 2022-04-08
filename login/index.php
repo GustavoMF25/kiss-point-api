@@ -18,6 +18,7 @@ function validaLogin($login, $senha, $con)
     return $return;
 }
 
+print_r($_GET);
 if (isset($login) && isset($senha)) {
     include '../app/config/conMysql.php';
     $response = [];
