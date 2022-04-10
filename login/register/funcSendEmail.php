@@ -39,5 +39,3 @@ function sendEmail($emailUser, $codeEmail)
         return false;
     }
 }
-
-sendEmail ('vitor71428@gmail.com', '010203');
