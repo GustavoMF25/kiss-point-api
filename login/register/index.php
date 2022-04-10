@@ -1,6 +1,7 @@
 <?php
-include 'FuncSendEmail.php';
+date_default_timezone_set('America/Sao_Paulo');
 
+$code = isset($_GET['code']) ? $_GET['code'] : null;
 $login = isset($_GET['login']) ? $_GET['login'] : null;
 $password = isset($_GET['password']) ? $_GET['password'] : null;
 $name = isset($_GET['name']) ? $_GET['name'] : null;
@@ -16,18 +17,19 @@ $token = '';
 $namePhoto = '';
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //password encryption
 
-function verifyCode($code, $con)
-{
-    $verifyCode = "select count(idtokenemail) from tokenemail where code = '{$code}'";
-    $respCode = mysqli_query($con, $verifyCode);
-    $verCode = mysqli_fetch_array($respCode)[0];
-
-    return $verCode;
-}
-
-function register($login, $hashedPassword, $name, $email, $namePhoto, $phone, $datebirth, $country, $state, $city, $con)
-{
+if (
+    isset($login) && isset($password) &&
+    isset($name) && isset($email) &&
+    isset($datebirth)
+    //isset($country) && isset($state) &&
+    //isset($city) && isset($datebirth)
+) {
+    include '../../app/config/conMysql.php';
     $response = [];
+    $token = '';
+
+    $sqlVerifyCode = "select dategen, hourgen from tokenregister where code = {$code} and emailuser = '{$email}'";
+    $resultVerifyCode = mysqli_query($con, $sqlVerifyCode);
 
     $sqlVerifyLogin = "select 1 from user where login = '{$login}'";
     $resultVerifyLogin = mysqli_query($con, $sqlVerifyLogin);
@@ -39,8 +41,16 @@ function register($login, $hashedPassword, $name, $email, $namePhoto, $phone, $d
         $response = ['status' => false, 'error' => 'Login indisponível.'];
     } elseif (mysqli_num_rows($resultVerifyEmail) > 0) {
         $response = ['status' => false, 'error' => 'Usuário já cadastrado'];
-    } else {
-        $sqlRegisterUser = "insert into user values (null,
+    } elseif (mysqli_num_rows($resultVerifyCode) > 0) {
+        $rowVerifyCode = mysqli_fetch_array($resultVerifyCode);
+        $dateTimeGenCode = date("$rowVerifyCode[0] $rowVerifyCode[1]");
+
+        $time1 = new DateTime($dateTimeGenCode);
+        $time2 = $time1->diff(new DateTime(date('Y-m-d H:i:s')));
+        $differenceHours = $time2->format("%h");
+
+        if ($differenceHours  <= 24) {
+            $sqlRegisterUser = "insert into user values (null,
                                                      '{$login}',
                                                      '{$hashedPassword}',   
                                                      '{$name}',   
@@ -52,46 +62,25 @@ function register($login, $hashedPassword, $name, $email, $namePhoto, $phone, $d
                                                      '{$country}',
                                                      '{$state}',
                                                      '{$city}',
-                                                     'n')";
+                                                     'y')";
 
-        if (mysqli_query($con, $sqlRegisterUser)) {
-            $idUser = mysqli_insert_id($con);
+            if (mysqli_query($con, $sqlRegisterUser)) {
+                $idUser = mysqli_insert_id($con);
+                $data = ['id' => $idUser, 'nome' => $name, 'email' => $email, 'login' => $login, 'token' => $token];
 
-            $code = rand(1000, 9999);
-            while (verifyCode($code, $con) > 0) {
-                $code = rand(1000, 9999);
-            }
+                $sqlUpdateToken = "update tokenregister set used = 'y' where where code = {$code} and emailuser = '{$email}'";
+                mysqli_query($con, $sqlUpdateToken);
 
-            $nowDate = date('Y-m-d');
-            $nowHora = date("H:i:s");
-            $insertCode = "insert into tokenemail values(null,{$idUser},{$code},'{$nowDate}','{$nowHora}')";
-
-            if (mysqli_query($con, $insertCode)) {
-                $mensagem = "Segue abaixo códogo solicitádo <br> $code";
-                if (sendEmail($email, $mensagem) == true) {
-                    $response = ['status' => true, 'sendEmail' => true];
-                } else {
-                    $response = ['status' => true, 'sendEmail' => false];
-                }
+                $response = ['status' => true, 'response' => 'Usuário cadastrado com sucesso', 'dados' => $data];
             } else {
-                $response = ['status' => false, 'error' => 'Erro ao enviar o código ao E-mail.'];
+                $response = ['status' => false, 'error' => 'Erro ao cadastrar usuário'];
             }
         } else {
-            $response = ['status' => false, 'error' => 'Erro ao cadastrar usuário'];
+            $response = ['status' => false, 'error' => 'Código de confirmação expirado.'];
         }
+    } else {
+        $response = ['status' => false, 'error' => 'Código de confirmação inválido.'];
     }
-    return $response;
-}
-
-if (
-    isset($login) && isset($password) &&
-    isset($name) && isset($email)
-    //isset($country) && isset($state) &&
-    //isset($city) && isset($datebirth)
-) {
-    include '../../app/config/conMysql.php';
-    $response = [];
-    $response = register($login, $hashedPassword, $name, $email, $namePhoto, $phone, $datebirth, $country, $state, $city, $con);
 } else {
     $response = ['status' => false, 'error' => 'Preencha todos os campos.'];
 }
