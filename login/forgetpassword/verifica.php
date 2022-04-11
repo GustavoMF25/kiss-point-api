@@ -19,7 +19,8 @@ if (isset($usuario)) {
     $respValidaToken = mysqli_query($con, $validaToken);
     $tokenInsert = mysqli_fetch_array($respValidaToken);
     if (isset($tokenInsert)) {
-        $response = ['status' => true, 'dados' => 'Altere a sua senha.'];
+        $dados = ['msg' => 'Altere a sua senha.', 'idusuario' => $usuario];
+        $response = ['status' => true, 'dados' => $dados];
     } else {
         $response = ['status' => false, 'error' => 'Token invalida.'];
     }
