@@ -10,4 +10,4 @@ if (isset($newPassword) && isset($newPassword)) {
     
 }
 
-print_r($_POST);
+print_r($_REQUEST);
