@@ -12,7 +12,7 @@ function alterPassword($con, $newPassword, $idusmuario)
 {
     $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT); //password encryption
     $resp = [];
-    $sqlUpdatePassword = "UPDATE user SET password  = '{$hashed_password}' WHERE iduser = {$idusuario}";
+  echo  $sqlUpdatePassword = "UPDATE user SET password  = '{$hashed_password}' WHERE iduser = {$idusuario}";
     if (mysqli_query($con, $sqlUpdatePassword)) {
         $resp = ['status' => true, 'dados' => 'Senha alterada com sucesso'];
     }
