@@ -2,7 +2,6 @@
 include '../../app/config/config.php';
 include '../../app/config/conMysql.php';
 
-print_r($_GET);
 $newPassword = isset($_GET['newPassword']) ? $_GET['newPassword'] : NULL;
 $idusuario = isset($_GET['idusuario']) ? $_GET['idusuario'] : NULL;
 $token = isset($_GET['token']) ? $_GET['token'] : NULL;
