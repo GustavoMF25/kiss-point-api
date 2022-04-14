@@ -7,7 +7,7 @@ $idusuario = isset($_GET['idusuario']) ? $_GET['idusuario'] : NULL;
 $token = isset($_GET['token']) ? $_GET['token'] : NULL;
 
 $response = [];
-function alterPassword($con, $newPassword, $idusmuario)
+function alterPassword($con, $newPassword, $idusuario)
 {
     $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT); //password encryption
     $resp = [];
