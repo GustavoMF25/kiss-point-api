@@ -26,9 +26,9 @@ if (isset($newPassword) && isset($newPassword) && isset($token)) {
     if ($validar > 0) {
         $response = alterPassword($con, $newPassword, $idusuario);
     } else {
-        $response = ['status' => false, 'dados' => 'Token inválida.'];
+        $response = ['status' => false, 'error' => 'Token inválida.'];
     }
 } else {
-    $response = ['status' => false, 'dados' => 'Sem dados informados.'];
+    $response = ['status' => false, 'error' => 'Sem dados informados.'];
 }
 echo json_encode($response);
