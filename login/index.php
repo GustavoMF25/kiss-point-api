@@ -19,7 +19,7 @@ function validaLogin($login, $senha, $con)
             $data = ['id' => $validaUsuario[0], 'nome' => $validaUsuario[1], 'email' => $validaUsuario[2], 'login' => $validaUsuario[3], 'token' => $token];
             return ['status' => true, 'dados' => $data];
         } else {
-            return ['status' => false, 'dados' => 'Senha incorreta.'];
+            return ['status' => false, 'error' => 'Senha incorreta.'];
         }
     } else {
         $return = ['status' => false, 'error' => 'Usuário não encontrado.'];
