@@ -8,7 +8,7 @@ function validaLogin($login, $senha, $con)
 {
     $return = [];
     $token = '';
-   echo $sqlVerificaUsuario = "select iduser, name, email, login, photo, password from user where login = '{$login}'";
+    $sqlVerificaUsuario = "select iduser, name, email, login, photo, password from user where login = '{$login}'";
 
     $respVerificaUsuario = mysqli_query($con, $sqlVerificaUsuario);
     $validaUsuario = mysqli_fetch_array($respVerificaUsuario);

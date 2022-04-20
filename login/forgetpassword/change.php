@@ -5,7 +5,7 @@ include '../../app/config/conMysql.php';
 $newPassword = isset($_GET['newPassword']) ? $_GET['newPassword'] : NULL;
 $idusuario = isset($_GET['idusuario']) ? $_GET['idusuario'] : NULL;
 $token = isset($_GET['token']) ? $_GET['token'] : NULL;
-
+print_r($_REQUEST);
 $response = [];
 function alterPassword($con, $newPassword, $idusuario)
 {

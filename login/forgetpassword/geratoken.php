@@ -1,20 +1,19 @@
 <?php
+
 include '../../app/config/config.php';
 include '../../app/config/func.php';
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $modo = isset($_GET['modo']) ? $_GET['modo'] : null;
 $response = [];
 
-
-
-function verificaCode($code, $con)
-{
+function verificaCode($code, $con) {
     $verifyCode = "select count(idtokenemail) from tokenemail where code = '{$code}'";
     $respCode = mysqli_query($con, $verifyCode);
     $verCode = mysqli_fetch_array($respCode)[0];
 
     return $verCode;
 }
+
 if ($type == 'email') {
 
     include '../../app/config/conMysql.php';
@@ -31,7 +30,13 @@ if ($type == 'email') {
         }
         $nowDate = date('Y-m-d');
         $nowHora = date("H:i:s");
-        $insertCode = "insert into tokenemail values(null,{$verifyEmail[0]},{$code},'{$nowDate}','{$nowHora}')";
+        $insertCode = "insert into tokenemail values(
+                null,
+                {$verifyEmail[0]},
+                {$code},
+                '{$nowDate}',
+                '{$nowHora}',
+                'n')";
 
         if (mysqli_query($con, $insertCode)) {
             $mensagem = "
@@ -42,6 +47,7 @@ if ($type == 'email') {
             sendEmail($modo, $mensagem, 'CHANGE PASSWORD');
             $response = ['status' => true, 'dados' => 'Código enviado para o E-mail solicitado.'];
         } else {
+            print_r(mysqli_error($con));
             $response = ['status' => false, 'error' => 'Erro ao enviar o código ao E-mail.'];
         }
     } else {

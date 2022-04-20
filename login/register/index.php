@@ -29,7 +29,8 @@ $city = isset($_GET['city']) ? $_GET['city'] : null;
 $token = '';
 $namePhoto = '';
 $hashed_password = password_hash($password, PASSWORD_DEFAULT); //password encryption
-
+ini_set('display_errors', 1);
+ini_set('display_startup_erros', 1);
 function register($login, $hashed_password, $name, $email, $namePhoto, $datebirth, $country, $state, $city, $con)
 {
     $return = [];
@@ -56,7 +57,6 @@ function register($login, $hashed_password, $name, $email, $namePhoto, $datebirt
                                                      '{$state}',
                                                      '{$city}',
                                                      'n')";
-        echo $sqlRegisterUser;
         if (mysqli_query($con, $sqlRegisterUser)) {
             $code = rand(100000, 999999);
             $sqlVerifyCode = "select 1 from tokenEmail 
@@ -91,4 +91,4 @@ if (
 } else {
     echo json_encode(['status' => false, 'error' => 'Preencha todos os campos.']);
 }
-print_r($response);
+echo json_encode($response);
