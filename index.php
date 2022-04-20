@@ -124,9 +124,9 @@
     <h1 class="ml5">
         <span class="text-wrapper">
             <span class="line line1"></span>
-            <span class="letters letters-left">Kiss</span>
+            <span class="letters letters-left">GET</span>
             <span class="letters ampersand">-</span>
-            <span class="letters letters-right">Point</span>
+            <span class="letters letters-right">POINT</span>
             <span class="line line2"></span>
         </span>
     </h1>

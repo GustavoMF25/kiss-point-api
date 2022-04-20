@@ -1,8 +1,8 @@
 <?php
 
 /* Mysql */
-$schemaBase = "heroku_926533faaab0bcc";
-$con = mysqli_connect("us-cdbr-east-05.cleardb.net", "b4608a9a4b133c", "f521d32a", $schemaBase);
+$schemaBase = "emegygxj_get_point";
+$con = mysqli_connect("15.235.9.101", "emegygxj_user_admin", "admin@123qwe**", $schemaBase);
 
 $sql = "SET NAMES 'utf8'";
 mysqli_query($con, $sql);
