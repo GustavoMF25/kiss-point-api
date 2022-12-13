@@ -1,8 +1,9 @@
 <?php
 
 /* Mysql */
+// Base de dados invisível
 $schemaBase = "emegygxj_get_point";
-$con = mysqli_connect("15.235.9.101", "emegygxj_user_admin", "admin@123qwe**", $schemaBase);
+$con = mysqli_connect($host, $user, $senha, $schemaBase);
 
 $sql = "SET NAMES 'utf8'";
 mysqli_query($con, $sql);
